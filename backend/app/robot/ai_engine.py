@@ -69,6 +69,7 @@ Regras obrigatórias:
 - claims_realtime=false ou clock_anomaly NÃO significam automaticamente atraso de preço.
 - local_priority_hint é ranking de atenção — NÃO é ordem.
 - local_regime_hint é apenas uma heurística: não copies o rótulo como conclusão sem verificar os dados.
+- Analisa os 5 melhores candidatos disponíveis; não inventes candidatos em falta.
 - top_candidates_comparison: arguments_for/against, trading_costs, missing_for_entry,
   quantitative_probs_note, verdict accept|reject + motivo com EV/probs/ATR/spread.
 - HOLD se EV líquido ≤0, evidência fraca ou riscos superiores — justifica rejeição concreta.
