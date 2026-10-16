@@ -39,6 +39,40 @@ def _utcnow() -> datetime:
     return datetime.now(timezone.utc)
 
 
+def _select_filling(mt5: Any, symbol: str, request: dict[str, Any]) -> tuple[dict[str, Any] | None, dict[str, Any]]:
+    """Negocia apenas modos permitidos pelo símbolo; nunca contorna outras recusas."""
+    info = mt5.symbol_info(symbol)
+    if info is None:
+        return None, {"reason": "symbol_info indisponível", "filling_tried": []}
+    flags = int(getattr(info, "filling_mode", 0) or 0)
+    execution = getattr(info, "trade_exemode", None)
+    market = getattr(mt5, "SYMBOL_TRADE_EXECUTION_MARKET", 2)
+    candidates = []
+    if flags & getattr(mt5, "SYMBOL_FILLING_IOC", 2):
+        candidates.append(("IOC", getattr(mt5, "ORDER_FILLING_IOC", 1)))
+    if flags & getattr(mt5, "SYMBOL_FILLING_FOK", 1):
+        candidates.append(("FOK", getattr(mt5, "ORDER_FILLING_FOK", 0)))
+    if execution is not None and execution != market:
+        candidates.append(("RETURN", getattr(mt5, "ORDER_FILLING_RETURN", 2)))
+    tried = []
+    if not hasattr(mt5, "order_check"):
+        return None, {"reason": "order_check indisponível", "filling_tried": []}
+    for name, mode in candidates:
+        candidate = {**request, "type_filling": mode}
+        try:
+            result = mt5.order_check(candidate)
+            rc = int(getattr(result, "retcode", -1)) if result is not None else -1
+            comment = str(getattr(result, "comment", ""))
+        except Exception as exc:  # noqa: BLE001
+            return None, {"reason": f"order_check exceção: {exc}", "filling_tried": tried}
+        tried.append({"mode": name, "type_filling": mode, "retcode": rc, "comment": comment})
+        if rc in (0, getattr(mt5, "TRADE_RETCODE_DONE", 10009)):
+            return candidate, {"type_filling": mode, "filling_tried": tried, "retcode": rc, "comment": comment}
+        if rc != getattr(mt5, "TRADE_RETCODE_INVALID_FILL", 10030):
+            return None, {"reason": f"order_check retcode={rc}", "filling_tried": tried}
+    return None, {"reason": "Sem modo de preenchimento aceite (10030 ou incompatível)", "filling_tried": tried}
+
+
 class MT5DemoExecutor:
     """Centraliza order_send. Injetável via mt5_factory para testes."""
 
@@ -402,29 +436,13 @@ class MT5DemoExecutor:
                 "type_time": mt5.ORDER_TIME_GTC,
                 "type_filling": getattr(mt5, "ORDER_FILLING_IOC", 1),
             }
-            check = None
-            try:
-                if hasattr(mt5, "order_check"):
-                    check = mt5.order_check(request)
-                    attempt.order_check_json = json.dumps(
-                        {"retcode": getattr(check, "retcode", None), "comment": str(getattr(check, "comment", ""))},
-                        default=str,
-                    )
-                    if check is not None and getattr(check, "retcode", 0) not in {
-                        0,
-                        getattr(mt5, "TRADE_RETCODE_DONE", 10009),
-                    }:
-                        # Alguns builds usam retcode 0 no check OK
-                        rc = int(getattr(check, "retcode", -1))
-                        if rc not in (0, 10009) and rc >= 10000:
-                            # order_check warnings — continuar só se DONE-like; senão bloquear se FAIL
-                            if rc >= 10016:  # generic invalid
-                                attempt.status = "rejected"
-                                attempt.reject_reason = f"order_check retcode={rc}"
-                                db.commit()
-                                return self._refuse(attempt.reject_reason, decision_id=decision.id)
-            except Exception as exc:  # noqa: BLE001
-                logger.warning("order_check: %s", exc)
+            request, check_audit = _select_filling(mt5, symbol, request)
+            attempt.order_check_json = json.dumps(check_audit, default=str)
+            if request is None:
+                attempt.status = "rejected"
+                attempt.reject_reason = check_audit["reason"]
+                db.commit()
+                return self._refuse(attempt.reject_reason, decision_id=decision.id, order_check_called=bool(check_audit["filling_tried"]))
 
             # Envio — único ponto
             try:
@@ -567,6 +585,10 @@ class MT5DemoExecutor:
                 if ai2 is None or not self._is_demo(ai2, mt5):
                     errors.append(f"ticket {ticket}: conta deixou de ser DEMO")
                     break
+                req, close_check = _select_filling(mt5, symbol, req)
+                if req is None:
+                    errors.append(f"ticket {ticket}: {close_check['reason']} ({close_check['filling_tried']})")
+                    continue
                 try:
                     res = mt5.order_send(req)
                 except Exception as exc:  # noqa: BLE001
