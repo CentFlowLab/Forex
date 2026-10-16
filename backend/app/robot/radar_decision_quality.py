@@ -262,7 +262,7 @@ def detect_ev_double_count(
     contradiction_re = re.compile(
         r"(?:EV\\s*l[ií]quido|expected_net)[^\\d\\-]{0,24}"
         r"(?P<value>-?\\d+(?:[.,]\\d+)?)"
-        r"[^.!?\\n]{0,110}?"
+        r"[^!?\\n]{0,110}?"
         r"(?:inferior\\s+a\\s+(?:zero|0(?:[.,]0+)?)|"
         r"menor\\s+(?:do\\s+)?que\\s+(?:zero|0(?:[.,]0+)?)|"
         r"negativ[oa])",
