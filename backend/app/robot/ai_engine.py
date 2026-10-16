@@ -59,12 +59,17 @@ Regras obrigatórias:
   (cita o número exacto) e justifica com riscos/evidência — não inventes net−cost.
 - expected_move_pips_30m ≠ EV em dólares; não os mistures.
 - Compara BUY e SELL nas directional_opportunities; escolhe a melhor ou HOLD.
+- HOLD não é preferido por defeito. Avalia EV líquido, evidência, frescura e risco.
+  Se nenhuma entrada tiver vantagem demonstrável, HOLD é obrigatório.
 - Mesmo em HOLD: preenche most_likely_direction, cited_p_* e cited_expected_net_usd
   com os valores exactos do motor.
 - Não uses informação futura.
 - Origem e frescura: data_quality, quote.source, feed_state, update_age_s.
+- Com cotações atrasadas, não assumes que o preço de entrada ainda é executável; valida frescura e risco antes de BUY/SELL.
 - claims_realtime=false ou clock_anomaly NÃO significam automaticamente atraso de preço.
 - local_priority_hint é ranking de atenção — NÃO é ordem.
+- local_regime_hint é apenas uma heurística: não copies o rótulo como conclusão sem verificar os dados.
+- Analisa os 5 melhores candidatos disponíveis; não inventes candidatos em falta.
 - top_candidates_comparison: arguments_for/against, trading_costs, missing_for_entry,
   quantitative_probs_note, verdict accept|reject + motivo com EV/probs/ATR/spread.
 - HOLD se EV líquido ≤0, evidência fraca ou riscos superiores — justifica rejeição concreta.

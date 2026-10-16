@@ -115,3 +115,30 @@ def test_numeric_gbpaud_reconciliation():
     assert abs(net - 2.6285) < 0.05
     # Movimento esperado +0.39 pips NÃO é o EV$
     assert 0.39 != net
+
+
+def test_positive_ev_cannot_be_below_zero():
+    payload = {
+        "decision": "HOLD",
+        "justification": (
+            "GBPAUD tem um EV líquido de 0.7265, que é inferior a 0, "
+            "considerando os custos de transação."
+        ),
+        "entry_conditions": "Aguardar validação estatística.",
+    }
+    check = detect_ev_double_count(payload)
+    assert check["ai_decision_inconsistent"] is True
+    assert check["inconsistency_type"] == "ev_sign_contradiction"
+    quality = assess_radar_decision_quality(payload)
+    assert quality.ok is False
+    assert quality.ai_decision_inconsistent is True
+    assert payload["decision"] == "HOLD"
+
+
+def test_positive_ev_can_still_be_rejected_for_weak_evidence():
+    payload = {
+        "decision": "HOLD",
+        "justification": "GBPAUD EV líquido de 0.7265 positivo, mas evidência insuficiente.",
+    }
+    check = detect_ev_double_count(payload)
+    assert check["ai_decision_inconsistent"] is False

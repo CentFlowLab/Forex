@@ -42,10 +42,11 @@ def test_beta_ci_widens_for_small_n():
 
 
 def test_evidence_threshold_matches_engine():
-    assert evidence_from_samples(10) < 0.35 or evidence_from_samples(10) >= 0.25
-    # n>=30 eleva evidence
+    assert evidence_from_samples(10, dir_conf=0.3) == 0.3
+    # 43 amostras não justificam elevar artificialmente a evidência acima de 0.35.
     e = evidence_from_samples(43, dir_conf=0.3)
-    assert e >= 0.35
+    assert 0.3 <= e < 0.35
+    assert evidence_from_samples(80, dir_conf=0.3) >= 0.35
 
 
 def test_actionable_filter_rejects_low_evidence():
@@ -77,7 +78,7 @@ def test_conservative_ci_can_reject_positive_mean_ev():
 
 
 def test_backtest_symbol_runs_oos_without_lookahead():
-    candles = _synth_candles(1500, drift=0.00008)
+    candles = _synth_candles(2400, drift=0.00008)
     r = backtest_symbol(
         "GBPAUD",
         candles,

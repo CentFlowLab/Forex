@@ -257,15 +257,36 @@ def detect_ev_double_count(
                 )
             matches.append(best)
 
+    # Contradição aritmética explícita: EV positivo não pode ser "inferior a zero".
+    # Não confundir "abaixo do limiar de entrada" com "negativo".
+    contradiction_re = re.compile(
+        r"(?:EV\s*l[ií]quido|expected_net)[^\d\-]{0,24}"
+        r"(?P<value>-?\d+(?:[.,]\d+)?)"
+        r"[^!?\n]{0,110}?"
+        r"(?:inferior\s+a\s+(?:zero|0(?:[.,]0+)?)|"
+        r"menor\s+(?:do\s+)?que\s+(?:zero|0(?:[.,]0+)?)|"
+        r"negativ[oa])",
+        flags=re.IGNORECASE,
+    )
+    for match in contradiction_re.finditer(blob):
+        value = float(match.group("value").replace(",", "."))
+        if value > 0:
+            matches.append({
+                "openai_claimed_ev": value,
+                "openai_claim_snippet": match.group(0)[:160],
+                "diagnosis": "A IA classificou um EV positivo como inferior a zero.",
+            })
+
     inconsistent = bool(matches)
+    contradiction_found = any("symbol" not in m for m in matches)
     return {
         "ai_decision_inconsistent": inconsistent,
-        "inconsistency_type": "ev_costs_double_counted" if inconsistent else None,
+        "inconsistency_type": ("ev_sign_contradiction" if contradiction_found else "ev_costs_double_counted") if inconsistent else None,
         "matches": matches,
         "real_block_reason": (
-            "Justificação OpenAI matematicamente contraditória (custos descontados "
-            "duas vezes). A decisão HOLD original NÃO é convertida em BUY/SELL; "
-            "bloqueio por inconsistência de análise, não por EV≤0 do motor."
+            "Justificação OpenAI matematicamente contraditória (sinal do EV ou custos). "
+            "A decisão HOLD original NÃO é convertida em BUY/SELL; "
+            "bloqueio por inconsistência da análise."
             if inconsistent
             else None
         ),
