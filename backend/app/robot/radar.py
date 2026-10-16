@@ -214,6 +214,7 @@ class RadarScan:
                 f"OBRIGATÓRIO: top_candidates_comparison com os {OPENAI_TOP_CANDIDATES} "
                 "candidatos (a favor, contra, custos, o que falta, "
                 "verdict accept|reject + motivo com ATR/spread/EV/probs). "
+                "HOLD não é o resultado preferido por defeito, mas é obrigatório sem vantagem demonstrável. "
                 "HOLD só se nenhum candidato tiver EV líquido positivo e evidência suficiente — "
                 "explica rejeição concreta; indica mesmo assim a direção mais provável. "
                 "BUY/SELL com entry/SL/TP + why_preferred se houver edge demonstrável. "
