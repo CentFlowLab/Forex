@@ -65,6 +65,7 @@ Regras obrigatórias:
   com os valores exactos do motor.
 - Não uses informação futura.
 - Origem e frescura: data_quality, quote.source, feed_state, update_age_s.
+- Com cotações atrasadas, não assumes que o preço de entrada ainda é executável; valida frescura e risco antes de BUY/SELL.
 - claims_realtime=false ou clock_anomaly NÃO significam automaticamente atraso de preço.
 - local_priority_hint é ranking de atenção — NÃO é ordem.
 - local_regime_hint é apenas uma heurística: não copies o rótulo como conclusão sem verificar os dados.
