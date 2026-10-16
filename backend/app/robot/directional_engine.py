@@ -731,6 +731,23 @@ def opportunities_for_openai(scan_result: dict[str, Any]) -> list[dict[str, Any]
     out = []
     for o in scan_result.get("top_opportunities") or []:
         f30 = next((f for f in (o.get("forecasts") or []) if f.get("horizon_min") == 30), {})
+        # O ranking pode incluir candidatos rejeitados quando nenhum é acionável.
+        # Nunca apresentar esses candidatos à IA como oportunidades de entrada.
+        if o.get("reject_reasons") or o.get("quote_source") != "mt5" or o.get("feed_state") != "recente":
+            continue
+        if (o.get("evidence_quality") or 0) < 0.35 or (o.get("expected_net_usd") or 0) <= 0:
+            continue
+        # Evitar compras quando a direção/expectativa a 30 min favorece queda,
+        # e vendas quando favorece subida. P_hit de barreira não substitui P_dir.
+        side = o.get("side")
+        if not f30 or side not in ("BUY", "SELL"):
+            continue
+        up, down = f30.get("p_up"), f30.get("p_down")
+        move = f30.get("expected_move_pips")
+        if up is None or down is None or move is None:
+            continue
+        if (side == "BUY" and (up <= down or move <= 0)) or (side == "SELL" and (down <= up or move >= 0)):
+            continue
         net = o.get("expected_net_usd")
         cost = o.get("cost_usd")
         try:
