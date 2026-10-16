@@ -59,6 +59,8 @@ Regras obrigatórias:
   (cita o número exacto) e justifica com riscos/evidência — não inventes net−cost.
 - expected_move_pips_30m ≠ EV em dólares; não os mistures.
 - Compara BUY e SELL nas directional_opportunities; escolhe a melhor ou HOLD.
+- HOLD não é preferido por defeito. Avalia EV líquido, evidência, frescura e risco.
+  Se nenhuma entrada tiver vantagem demonstrável, HOLD é obrigatório.
 - Mesmo em HOLD: preenche most_likely_direction, cited_p_* e cited_expected_net_usd
   com os valores exactos do motor.
 - Não uses informação futura.
