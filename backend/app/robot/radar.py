@@ -208,6 +208,8 @@ class RadarScan:
                 "directional_opportunities (até 5, ordenadas por EV líquido). "
                 "Também avalia pairs_for_comparison. "
                 "local_priority_hint é ranking de atenção/custo — NÃO é ordem nem sinal; "
+                "local_regime_hint é uma heurística local, não é conclusão: não copies o rótulo "
+                "sem confirmar tendência e volatilidade nos dados disponíveis. "
                 "NÃO inventes probabilidades — usa as do motor quantitativo. "
                 f"OBRIGATÓRIO: top_candidates_comparison com os {OPENAI_TOP_CANDIDATES} "
                 "candidatos (a favor, contra, custos, o que falta, "
