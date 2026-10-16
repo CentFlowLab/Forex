@@ -656,6 +656,21 @@ export function Robot() {
           >
             Paragem de emergência
           </button>
+          {(demo?.emergency || status.demo_auth?.emergency) && (
+            <button
+              className="rounded-lg bg-sky-500/20 px-3 py-1.5 text-xs text-sky-200 disabled:opacity-40"
+              disabled={busy}
+              onClick={() => {
+                if (!window.confirm("Remover paragem de emergência DEMO?\n\nIsto não ativa operações. Terás de autorizar novamente a conta DEMO.")) return;
+                void act(async () => {
+                  const r = await api.robotDemoClearEmergency();
+                  setDemo(r);
+                });
+              }}
+            >
+              Remover bloqueio de emergência
+            </button>
+          )}
           <button
             className="rounded-lg bg-accent-gold/20 px-3 py-1.5 text-xs text-accent-gold disabled:opacity-40"
             disabled={busy}

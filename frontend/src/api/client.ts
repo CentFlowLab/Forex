@@ -56,6 +56,8 @@ export const api = {
     }),
   robotDemoEmergency: () =>
     request<RobotDemoAuth>("/robot/demo/emergency", { method: "POST" }),
+  robotDemoClearEmergency: () =>
+    request<RobotDemoAuth>("/robot/demo/emergency/clear", { method: "POST" }),
   robotDemoClosePositions: (confirmed: boolean) =>
     request<Record<string, unknown>>("/robot/demo/close-positions", {
       method: "POST",
