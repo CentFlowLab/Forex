@@ -94,7 +94,7 @@ class Settings(BaseSettings):
     quote_fresh_seconds: float = 45.0
     quote_delayed_seconds: float = 7200.0
 
-    max_risk_per_trade_pct: float = 0.5
+    max_risk_per_trade_pct: float = 0.25
     max_daily_loss_pct: float = 2.0
     max_concurrent_positions: int = 1
     max_spread_pips: float = 2.0
