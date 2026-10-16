@@ -331,6 +331,15 @@ def robot_demo_emergency(db: Session = Depends(get_db)) -> dict[str, Any]:
     return _demo_panel(db)
 
 
+@router.post("/demo/emergency/clear")
+def robot_demo_clear_emergency(db: Session = Depends(get_db)) -> dict[str, Any]:
+    """Limpa apenas a emergência; a autorização DEMO permanece inativa."""
+    from app.brokers.mt5_demo_auth import clear_emergency
+
+    clear_emergency(db)
+    return _demo_panel(db)
+
+
 @router.post("/demo/close-positions")
 def robot_demo_close_positions(
     body: DemoCloseBody, db: Session = Depends(get_db)
