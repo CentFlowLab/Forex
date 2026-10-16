@@ -190,15 +190,11 @@ class MT5DemoExecutor:
         # Estimar volume pelo order_calc_profit para 1 lote.
         order_type = mt5.ORDER_TYPE_BUY if side == "BUY" else mt5.ORDER_TYPE_SELL
         profit_1 = mt5.order_calc_profit(order_type, symbol, 1.0, entry, stop)
-        if profit_1 is None or abs(float(profit_1)) < 1e-12:
-            # Fallback pip aproximado
-            tick_value = float(getattr(info, "trade_tick_value", 0) or 0)
-            tick_size = float(getattr(info, "trade_tick_size", 0) or 0)
-            if tick_value <= 0 or tick_size <= 0:
-                return 0.0, "Não foi possível calcular risco (tick_value/tick_size)."
-            loss_per_lot = abs(entry - stop) / tick_size * tick_value
-        else:
-            loss_per_lot = abs(float(profit_1))
+        # Nunca dimensionar com estimativas aproximadas: a conversão para
+        # moeda da conta e o valor do tick variam por instrumento.
+        if profit_1 is None or not math.isfinite(float(profit_1)) or float(profit_1) >= 0:
+            return 0.0, "Risco MT5 indisponível ou stop não representa perda."
+        loss_per_lot = -float(profit_1)
         if loss_per_lot <= 0:
             return 0.0, "Perda por lote inválida."
         raw = risk_amount / loss_per_lot
@@ -337,12 +333,12 @@ class MT5DemoExecutor:
 
             # Stops levels
             stops_level = float(getattr(info, "trade_stops_level", 0) or 0) * point
-            if decision_side == "BUY" and stop >= entry - stops_level:
+            if decision_side == "BUY" and stop >= price - stops_level:
                 attempt.status = "rejected"
                 attempt.reject_reason = "Stop-loss inválido (stop level)."
                 db.commit()
                 return self._refuse(attempt.reject_reason, decision_id=decision.id)
-            if decision_side == "SELL" and stop <= entry + stops_level:
+            if decision_side == "SELL" and stop <= price + stops_level:
                 attempt.status = "rejected"
                 attempt.reject_reason = "Stop-loss inválido (stop level)."
                 db.commit()
@@ -377,7 +373,7 @@ class MT5DemoExecutor:
                 mt5,
                 symbol=symbol,
                 side=decision_side,
-                entry=entry,
+                entry=price,
                 stop=stop,
                 equity=equity,
                 risk_pct=float(settings.max_risk_per_trade_pct),
@@ -387,6 +383,25 @@ class MT5DemoExecutor:
                 attempt.reject_reason = vol_err or "Volume inválido."
                 db.commit()
                 return self._refuse(attempt.reject_reason, decision_id=decision.id)
+
+            # Validar também a pior execução permitida pela tolerância de
+            # desvio (20 pontos). Se ultrapassar o teto, reduzir/rejeitar.
+            worst_price = price + (20 * point if decision_side == "BUY" else -20 * point)
+            worst_volume, worst_error = self._volume_from_risk(
+                mt5,
+                symbol=symbol,
+                side=decision_side,
+                entry=worst_price,
+                stop=stop,
+                equity=equity,
+                risk_pct=float(settings.max_risk_per_trade_pct),
+            )
+            if worst_error or worst_volume <= 0:
+                attempt.status = "rejected"
+                attempt.reject_reason = worst_error or "Risco com desvio de execução excessivo."
+                db.commit()
+                return self._refuse(attempt.reject_reason, decision_id=decision.id)
+            volume = min(volume, worst_volume)
 
             attempt.volume_lots = volume
             attempt.price_requested = price
