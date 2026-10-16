@@ -1,0 +1,1189 @@
+{
+  "generated_at": "2026-10-15T11:37:00.484197+00:00",
+  "ai_enabled": false,
+  "live_trading": false,
+  "costs_audit": {
+    "lots": 0.1,
+    "pip_size": 0.0001,
+    "pip_value_per_lot_usd": 1.0,
+    "spread_pips": 1.2,
+    "slippage_pips": 0.3,
+    "commission_per_lot_setting": 7.0,
+    "commission_cash": 0.7,
+    "spread_cash": 1.2,
+    "slippage_cash": 0.6,
+    "total_round_trip": 2.5,
+    "expected_total": 2.5,
+    "costs_consistent": true,
+    "note": "EURUSD: 1 pip = $10 / lote standard → $1 / 0.1 lote. Spread 1.2 pip = $1.2; slip 0.3×2 = $0.6; comissão $7×0.1 = $0.7; total $2.5."
+  },
+  "criteria": {
+    "min_score": 0.5,
+    "min_pf_val": 1.05,
+    "min_pf_oos": 1.0,
+    "min_trades_val": 5,
+    "min_windows": 2
+  },
+  "hypotheses_predeclared": [
+    {
+      "id": "MA_base_20_50",
+      "base_key": "ma_crossover",
+      "params": {
+        "fast": 20,
+        "slow": 50
+      },
+      "use_h1_trend": false,
+      "use_vol_filter": false,
+      "hour_start": null,
+      "hour_end": null,
+      "note": "original default"
+    },
+    {
+      "id": "MA_near_5_50",
+      "base_key": "ma_crossover",
+      "params": {
+        "fast": 5,
+        "slow": 50
+      },
+      "use_h1_trend": false,
+      "use_vol_filter": false,
+      "hour_start": null,
+      "hour_end": null,
+      "note": "near-miss histórico"
+    },
+    {
+      "id": "MA_20_50_H1",
+      "base_key": "ma_crossover",
+      "params": {
+        "fast": 20,
+        "slow": 50
+      },
+      "use_h1_trend": true,
+      "use_vol_filter": false,
+      "hour_start": null,
+      "hour_end": null,
+      "note": "default+H1"
+    },
+    {
+      "id": "MA_5_50_H1",
+      "base_key": "ma_crossover",
+      "params": {
+        "fast": 5,
+        "slow": 50
+      },
+      "use_h1_trend": true,
+      "use_vol_filter": false,
+      "hour_start": null,
+      "hour_end": null,
+      "note": "near-miss+H1"
+    },
+    {
+      "id": "MA_20_50_H1_vol",
+      "base_key": "ma_crossover",
+      "params": {
+        "fast": 20,
+        "slow": 50
+      },
+      "use_h1_trend": true,
+      "use_vol_filter": true,
+      "hour_start": null,
+      "hour_end": null,
+      "note": "default+H1+vol"
+    },
+    {
+      "id": "MA_20_50_sess_7_17",
+      "base_key": "ma_crossover",
+      "params": {
+        "fast": 20,
+        "slow": 50
+      },
+      "use_h1_trend": false,
+      "use_vol_filter": false,
+      "hour_start": 7,
+      "hour_end": 17,
+      "note": "default+hora Londres/NY"
+    },
+    {
+      "id": "ST_base_20_60",
+      "base_key": "session_trend",
+      "params": {
+        "fast": 20,
+        "slow": 60,
+        "session_start_utc": 7,
+        "session_end_utc": 17,
+        "allow_all_hours": 0
+      },
+      "use_h1_trend": false,
+      "use_vol_filter": false,
+      "hour_start": null,
+      "hour_end": null,
+      "note": "original default"
+    },
+    {
+      "id": "ST_10_40",
+      "base_key": "session_trend",
+      "params": {
+        "fast": 10,
+        "slow": 40,
+        "session_start_utc": 7,
+        "session_end_utc": 17,
+        "allow_all_hours": 0
+      },
+      "use_h1_trend": false,
+      "use_vol_filter": false,
+      "hour_start": null,
+      "hour_end": null,
+      "note": "variante sessão mais rápida"
+    },
+    {
+      "id": "ST_20_60_H1",
+      "base_key": "session_trend",
+      "params": {
+        "fast": 20,
+        "slow": 60,
+        "session_start_utc": 7,
+        "session_end_utc": 17,
+        "allow_all_hours": 0
+      },
+      "use_h1_trend": true,
+      "use_vol_filter": false,
+      "hour_start": null,
+      "hour_end": null,
+      "note": "default+H1"
+    },
+    {
+      "id": "ST_10_40_H1_vol",
+      "base_key": "session_trend",
+      "params": {
+        "fast": 10,
+        "slow": 40,
+        "session_start_utc": 7,
+        "session_end_utc": 17,
+        "allow_all_hours": 0
+      },
+      "use_h1_trend": true,
+      "use_vol_filter": true,
+      "hour_start": null,
+      "hour_end": null,
+      "note": "rápida+H1+vol"
+    }
+  ],
+  "reports": [
+    {
+      "hypothesis_id": "MA_base_20_50",
+      "base_key": "ma_crossover",
+      "note": "original default",
+      "params": {
+        "fast": 20,
+        "slow": 50
+      },
+      "filters": {
+        "h1_trend": false,
+        "vol_filter": false,
+        "hour": [
+          null,
+          null
+        ]
+      },
+      "windows_passed": 0,
+      "decision": "rejeitada",
+      "reason": "Só 0/3 janelas; A_inicial:PF_val=0.309<1.05; PF_oos=0.450<1.0; score=-16.45<0.5 || B_media:PF_val=0.935<1.05; PF_oos=0.935<1.0; score=-0.88<0.5 || C_recente:PF_val=0.429<1.05; PF_oos=0.514<1.0; score=-12.53<0.5",
+      "windows": [
+        {
+          "window": "A_inicial",
+          "trades_val": 31,
+          "pf_val": 0.3086,
+          "pf_oos": 0.45,
+          "net_pnl_oos": -192.5,
+          "max_dd_oos": 2.24,
+          "pf_train": 0.619,
+          "trades_oos": 27,
+          "score": -16.455,
+          "passed": false,
+          "reason": "PF_val=0.309<1.05; PF_oos=0.450<1.0; score=-16.45<0.5"
+        },
+        {
+          "window": "B_media",
+          "trades_val": 19,
+          "pf_val": 0.9351,
+          "pf_oos": 0.9351,
+          "net_pnl_oos": -12.5,
+          "max_dd_oos": 0.7,
+          "pf_train": 0.4916,
+          "trades_oos": 19,
+          "score": -0.8794,
+          "passed": false,
+          "reason": "PF_val=0.935<1.05; PF_oos=0.935<1.0; score=-0.88<0.5"
+        },
+        {
+          "window": "C_recente",
+          "trades_val": 16,
+          "pf_val": 0.4286,
+          "pf_oos": 0.5143,
+          "net_pnl_oos": -127.5,
+          "max_dd_oos": 1.77,
+          "pf_train": 0.8467,
+          "trades_oos": 21,
+          "score": -12.5295,
+          "passed": false,
+          "reason": "PF_val=0.429<1.05; PF_oos=0.514<1.0; score=-12.53<0.5"
+        }
+      ]
+    },
+    {
+      "hypothesis_id": "MA_near_5_50",
+      "base_key": "ma_crossover",
+      "note": "near-miss histórico",
+      "params": {
+        "fast": 5,
+        "slow": 50
+      },
+      "filters": {
+        "h1_trend": false,
+        "vol_filter": false,
+        "hour": [
+          null,
+          null
+        ]
+      },
+      "windows_passed": 0,
+      "decision": "rejeitada",
+      "reason": "Só 0/3 janelas; A_inicial:PF_val=0.310<1.05; PF_oos=0.707<1.0; score=-14.99<0.5 || B_media:PF_oos=0.723<1.0 || C_recente:PF_oos=0.643<1.0",
+      "windows": [
+        {
+          "window": "A_inicial",
+          "trades_val": 36,
+          "pf_val": 0.3103,
+          "pf_oos": 0.7071,
+          "net_pnl_oos": -102.5,
+          "max_dd_oos": 1.94,
+          "pf_train": 0.632,
+          "trades_oos": 31,
+          "score": -14.9929,
+          "passed": false,
+          "reason": "PF_val=0.310<1.05; PF_oos=0.707<1.0; score=-14.99<0.5"
+        },
+        {
+          "window": "B_media",
+          "trades_val": 23,
+          "pf_val": 1.4026,
+          "pf_oos": 0.7232,
+          "net_pnl_oos": -77.5,
+          "max_dd_oos": 1.32,
+          "pf_train": 0.6825,
+          "trades_oos": 25,
+          "score": 2.9506,
+          "passed": false,
+          "reason": "PF_oos=0.723<1.0"
+        },
+        {
+          "window": "C_recente",
+          "trades_val": 15,
+          "pf_val": 1.4694,
+          "pf_oos": 0.6429,
+          "net_pnl_oos": -87.5,
+          "max_dd_oos": 1.6,
+          "pf_train": 1.2857,
+          "trades_oos": 21,
+          "score": 2.7484,
+          "passed": false,
+          "reason": "PF_oos=0.643<1.0"
+        }
+      ]
+    },
+    {
+      "hypothesis_id": "MA_20_50_H1",
+      "base_key": "ma_crossover",
+      "note": "default+H1",
+      "params": {
+        "fast": 20,
+        "slow": 50
+      },
+      "filters": {
+        "h1_trend": true,
+        "vol_filter": false,
+        "hour": [
+          null,
+          null
+        ]
+      },
+      "windows_passed": 0,
+      "decision": "rejeitada",
+      "reason": "Só 0/3 janelas; A_inicial:PF_val=0.429<1.05; score=-9.94<0.5 || B_media:PF_oos=0.857<1.0; score=-0.32<0.5 || C_recente:PF_oos=0.494<1.0; score=-0.99<0.5",
+      "windows": [
+        {
+          "window": "A_inicial",
+          "trades_val": 20,
+          "pf_val": 0.4286,
+          "pf_oos": 1.0,
+          "net_pnl_oos": -0.0,
+          "max_dd_oos": 0.7,
+          "pf_train": 0.9771,
+          "trades_oos": 16,
+          "score": -9.9366,
+          "passed": false,
+          "reason": "PF_val=0.429<1.05; score=-9.94<0.5"
+        },
+        {
+          "window": "B_media",
+          "trades_val": 11,
+          "pf_val": 1.0714,
+          "pf_oos": 0.8571,
+          "net_pnl_oos": -15.0,
+          "max_dd_oos": 0.87,
+          "pf_train": 0.5212,
+          "trades_oos": 10,
+          "score": -0.3186,
+          "passed": false,
+          "reason": "PF_oos=0.857<1.0; score=-0.32<0.5"
+        },
+        {
+          "window": "C_recente",
+          "trades_val": 8,
+          "pf_val": 1.2857,
+          "pf_oos": 0.4945,
+          "net_pnl_oos": -115.0,
+          "max_dd_oos": 1.2,
+          "pf_train": 0.6888,
+          "trades_oos": 18,
+          "score": -0.9894,
+          "passed": false,
+          "reason": "PF_oos=0.494<1.0; score=-0.99<0.5"
+        }
+      ]
+    },
+    {
+      "hypothesis_id": "MA_5_50_H1",
+      "base_key": "ma_crossover",
+      "note": "near-miss+H1",
+      "params": {
+        "fast": 5,
+        "slow": 50
+      },
+      "filters": {
+        "h1_trend": true,
+        "vol_filter": false,
+        "hour": [
+          null,
+          null
+        ]
+      },
+      "windows_passed": 0,
+      "decision": "rejeitada",
+      "reason": "Só 0/3 janelas; A_inicial:PF_val=0.161<1.05; score=-12.75<0.5 || B_media:PF_oos=0.468<1.0; score=-2.96<0.5 || C_recente:PF_oos=0.857<1.0; score=0.03<0.5",
+      "windows": [
+        {
+          "window": "A_inicial",
+          "trades_val": 18,
+          "pf_val": 0.1607,
+          "pf_oos": 1.1688,
+          "net_pnl_oos": 32.5,
+          "max_dd_oos": 0.77,
+          "pf_train": 0.8319,
+          "trades_oos": 21,
+          "score": -12.7515,
+          "passed": false,
+          "reason": "PF_val=0.161<1.05; score=-12.75<0.5"
+        },
+        {
+          "window": "B_media",
+          "trades_val": 15,
+          "pf_val": 1.125,
+          "pf_oos": 0.4675,
+          "net_pnl_oos": -102.5,
+          "max_dd_oos": 1.52,
+          "pf_train": 0.7213,
+          "trades_oos": 15,
+          "score": -2.9615,
+          "passed": false,
+          "reason": "PF_oos=0.468<1.0; score=-2.96<0.5"
+        },
+        {
+          "window": "C_recente",
+          "trades_val": 13,
+          "pf_val": 1.102,
+          "pf_oos": 0.8571,
+          "net_pnl_oos": -30.0,
+          "max_dd_oos": 0.72,
+          "pf_train": 0.7714,
+          "trades_oos": 20,
+          "score": 0.0327,
+          "passed": false,
+          "reason": "PF_oos=0.857<1.0; score=0.03<0.5"
+        }
+      ]
+    },
+    {
+      "hypothesis_id": "MA_20_50_H1_vol",
+      "base_key": "ma_crossover",
+      "note": "default+H1+vol",
+      "params": {
+        "fast": 20,
+        "slow": 50
+      },
+      "filters": {
+        "h1_trend": true,
+        "vol_filter": true,
+        "hour": [
+          null,
+          null
+        ]
+      },
+      "windows_passed": 0,
+      "decision": "rejeitada",
+      "reason": "Só 0/3 janelas; A_inicial:PF_val=0.297<1.05; score=-8.69<0.5 || B_media:PF_oos=0.964<1.0 || C_recente:PF_oos=0.735<1.0",
+      "windows": [
+        {
+          "window": "A_inicial",
+          "trades_val": 16,
+          "pf_val": 0.2967,
+          "pf_oos": 1.5,
+          "net_pnl_oos": 52.5,
+          "max_dd_oos": 0.52,
+          "pf_train": 1.1429,
+          "trades_oos": 13,
+          "score": -8.6936,
+          "passed": false,
+          "reason": "PF_val=0.297<1.05; score=-8.69<0.5"
+        },
+        {
+          "window": "B_media",
+          "trades_val": 7,
+          "pf_val": 1.7143,
+          "pf_oos": 0.9643,
+          "net_pnl_oos": -2.5,
+          "max_dd_oos": 0.52,
+          "pf_train": 0.544,
+          "trades_oos": 7,
+          "score": 7.149,
+          "passed": false,
+          "reason": "PF_oos=0.964<1.0"
+        },
+        {
+          "window": "C_recente",
+          "trades_val": 7,
+          "pf_val": 3.2143,
+          "pf_oos": 0.7347,
+          "net_pnl_oos": -32.5,
+          "max_dd_oos": 0.52,
+          "pf_train": 0.5844,
+          "trades_oos": 11,
+          "score": 20.7732,
+          "passed": false,
+          "reason": "PF_oos=0.735<1.0"
+        }
+      ]
+    },
+    {
+      "hypothesis_id": "MA_20_50_sess_7_17",
+      "base_key": "ma_crossover",
+      "note": "default+hora Londres/NY",
+      "params": {
+        "fast": 20,
+        "slow": 50
+      },
+      "filters": {
+        "h1_trend": false,
+        "vol_filter": false,
+        "hour": [
+          7,
+          17
+        ]
+      },
+      "windows_passed": 1,
+      "decision": "rejeitada",
+      "reason": "Só 1/3 janelas; A_inicial:PF_val=0.771<1.05; PF_oos=0.514<1.0; score=-7.03<0.5 || C_recente:PF_val=0.643<1.05; PF_oos=0.257<1.0; score=-9.84<0.5",
+      "windows": [
+        {
+          "window": "A_inicial",
+          "trades_val": 16,
+          "pf_val": 0.7714,
+          "pf_oos": 0.5143,
+          "net_pnl_oos": -85.0,
+          "max_dd_oos": 1.12,
+          "pf_train": 0.9524,
+          "trades_oos": 14,
+          "score": -7.0315,
+          "passed": false,
+          "reason": "PF_val=0.771<1.05; PF_oos=0.514<1.0; score=-7.03<0.5"
+        },
+        {
+          "window": "B_media",
+          "trades_val": 11,
+          "pf_val": 1.5429,
+          "pf_oos": 2.5714,
+          "net_pnl_oos": 55.0,
+          "max_dd_oos": 0.17,
+          "pf_train": 0.7232,
+          "trades_oos": 6,
+          "score": 19.1852,
+          "passed": true,
+          "reason": "passou critérios nesta janela"
+        },
+        {
+          "window": "C_recente",
+          "trades_val": 6,
+          "pf_val": 0.6429,
+          "pf_oos": 0.2571,
+          "net_pnl_oos": -130.0,
+          "max_dd_oos": 1.52,
+          "pf_train": 0.75,
+          "trades_oos": 12,
+          "score": -9.8376,
+          "passed": false,
+          "reason": "PF_val=0.643<1.05; PF_oos=0.257<1.0; score=-9.84<0.5"
+        }
+      ]
+    },
+    {
+      "hypothesis_id": "ST_base_20_60",
+      "base_key": "session_trend",
+      "note": "original default",
+      "params": {
+        "fast": 20,
+        "slow": 60,
+        "session_start_utc": 7,
+        "session_end_utc": 17,
+        "allow_all_hours": 0
+      },
+      "filters": {
+        "h1_trend": false,
+        "vol_filter": false,
+        "hour": [
+          null,
+          null
+        ]
+      },
+      "windows_passed": 1,
+      "decision": "rejeitada",
+      "reason": "Só 1/3 janelas; A_inicial:PF_val=0.551<1.05; PF_oos=0.735<1.0; score=-9.24<0.5 || C_recente:PF_val=0.857<1.05; PF_oos=0.643<1.0; score=-4.58<0.5",
+      "windows": [
+        {
+          "window": "A_inicial",
+          "trades_val": 10,
+          "pf_val": 0.551,
+          "pf_oos": 0.7347,
+          "net_pnl_oos": -32.5,
+          "max_dd_oos": 0.47,
+          "pf_train": 0.9771,
+          "trades_oos": 11,
+          "score": -9.2433,
+          "passed": false,
+          "reason": "PF_val=0.551<1.05; PF_oos=0.735<1.0; score=-9.24<0.5"
+        },
+        {
+          "window": "B_media",
+          "trades_val": 10,
+          "pf_val": 1.2857,
+          "pf_oos": 2.1429,
+          "net_pnl_oos": 60.0,
+          "max_dd_oos": 0.35,
+          "pf_train": 0.5934,
+          "trades_oos": 8,
+          "score": 12.0269,
+          "passed": true,
+          "reason": "passou critérios nesta janela"
+        },
+        {
+          "window": "C_recente",
+          "trades_val": 5,
+          "pf_val": 0.8571,
+          "pf_oos": 0.6429,
+          "net_pnl_oos": -50.0,
+          "max_dd_oos": 0.82,
+          "pf_train": 0.6171,
+          "trades_oos": 12,
+          "score": -4.5801,
+          "passed": false,
+          "reason": "PF_val=0.857<1.05; PF_oos=0.643<1.0; score=-4.58<0.5"
+        }
+      ]
+    },
+    {
+      "hypothesis_id": "ST_10_40",
+      "base_key": "session_trend",
+      "note": "variante sessão mais rápida",
+      "params": {
+        "fast": 10,
+        "slow": 40,
+        "session_start_utc": 7,
+        "session_end_utc": 17,
+        "allow_all_hours": 0
+      },
+      "filters": {
+        "h1_trend": false,
+        "vol_filter": false,
+        "hour": [
+          null,
+          null
+        ]
+      },
+      "windows_passed": 1,
+      "decision": "rejeitada",
+      "reason": "Só 1/3 janelas; A_inicial:PF_val=0.402<1.05; score=-5.90<0.5 || C_recente:PF_val=0.643<1.05; PF_oos=0.643<1.0; score=-7.47<0.5",
+      "windows": [
+        {
+          "window": "A_inicial",
+          "trades_val": 21,
+          "pf_val": 0.4018,
+          "pf_oos": 1.4464,
+          "net_pnl_oos": 62.5,
+          "max_dd_oos": 0.47,
+          "pf_train": 0.6578,
+          "trades_oos": 17,
+          "score": -5.8957,
+          "passed": false,
+          "reason": "PF_val=0.402<1.05; score=-5.90<0.5"
+        },
+        {
+          "window": "B_media",
+          "trades_val": 12,
+          "pf_val": 3.8571,
+          "pf_oos": 1.125,
+          "net_pnl_oos": 17.5,
+          "max_dd_oos": 0.72,
+          "pf_train": 0.7143,
+          "trades_oos": 15,
+          "score": 30.9993,
+          "passed": true,
+          "reason": "passou critérios nesta janela"
+        },
+        {
+          "window": "C_recente",
+          "trades_val": 9,
+          "pf_val": 0.6429,
+          "pf_oos": 0.6429,
+          "net_pnl_oos": -50.0,
+          "max_dd_oos": 0.87,
+          "pf_train": 0.7418,
+          "trades_oos": 12,
+          "score": -7.474,
+          "passed": false,
+          "reason": "PF_val=0.643<1.05; PF_oos=0.643<1.0; score=-7.47<0.5"
+        }
+      ]
+    },
+    {
+      "hypothesis_id": "ST_20_60_H1",
+      "base_key": "session_trend",
+      "note": "default+H1",
+      "params": {
+        "fast": 20,
+        "slow": 60,
+        "session_start_utc": 7,
+        "session_end_utc": 17,
+        "allow_all_hours": 0
+      },
+      "filters": {
+        "h1_trend": true,
+        "vol_filter": false,
+        "hour": [
+          null,
+          null
+        ]
+      },
+      "windows_passed": 0,
+      "decision": "rejeitada",
+      "reason": "Só 0/3 janelas; A_inicial:PF_val=0.321<1.05; PF_oos=0.771<1.0; score=-13.65<0.5 || B_media:PF_val=0.857<1.05; PF_oos=0.857<1.0; score=-3.38<0.5 || C_recente:Rejeitada: poucas operações na validação (risco de sobreajustamento).; ops_val=2<5",
+      "windows": [
+        {
+          "window": "A_inicial",
+          "trades_val": 5,
+          "pf_val": 0.3214,
+          "pf_oos": 0.7714,
+          "net_pnl_oos": -20.0,
+          "max_dd_oos": 0.52,
+          "pf_train": 1.2857,
+          "trades_oos": 8,
+          "score": -13.6524,
+          "passed": false,
+          "reason": "PF_val=0.321<1.05; PF_oos=0.771<1.0; score=-13.65<0.5"
+        },
+        {
+          "window": "B_media",
+          "trades_val": 5,
+          "pf_val": 0.8571,
+          "pf_oos": 0.8571,
+          "net_pnl_oos": -7.5,
+          "max_dd_oos": 0.35,
+          "pf_train": 0.8901,
+          "trades_oos": 5,
+          "score": -3.3804,
+          "passed": false,
+          "reason": "PF_val=0.857<1.05; PF_oos=0.857<1.0; score=-3.38<0.5"
+        },
+        {
+          "window": "C_recente",
+          "trades_val": 2,
+          "pf_val": 45.0,
+          "pf_oos": 1.0286,
+          "net_pnl_oos": 2.5,
+          "max_dd_oos": 0.65,
+          "pf_train": 0.4821,
+          "trades_oos": 9,
+          "score": 437.1874,
+          "passed": false,
+          "reason": "Rejeitada: poucas operações na validação (risco de sobreajustamento).; ops_val=2<5"
+        }
+      ]
+    },
+    {
+      "hypothesis_id": "ST_10_40_H1_vol",
+      "base_key": "session_trend",
+      "note": "rápida+H1+vol",
+      "params": {
+        "fast": 10,
+        "slow": 40,
+        "session_start_utc": 7,
+        "session_end_utc": 17,
+        "allow_all_hours": 0
+      },
+      "filters": {
+        "h1_trend": true,
+        "vol_filter": true,
+        "hour": [
+          null,
+          null
+        ]
+      },
+      "windows_passed": 0,
+      "decision": "rejeitada",
+      "reason": "Só 0/3 janelas; A_inicial:PF_val=0.771<1.05 || B_media:PF_oos=0.321<1.0; ops_val=3<5 || C_recente:ops_val=4<5",
+      "windows": [
+        {
+          "window": "A_inicial",
+          "trades_val": 8,
+          "pf_val": 0.7714,
+          "pf_oos": 1.9286,
+          "net_pnl_oos": 65.0,
+          "max_dd_oos": 0.35,
+          "pf_train": 0.8571,
+          "trades_oos": 10,
+          "score": 3.7494,
+          "passed": false,
+          "reason": "PF_val=0.771<1.05"
+        },
+        {
+          "window": "B_media",
+          "trades_val": 3,
+          "pf_val": 67.5,
+          "pf_oos": 0.3214,
+          "net_pnl_oos": -47.5,
+          "max_dd_oos": 0.7,
+          "pf_train": 0.9076,
+          "trades_oos": 5,
+          "score": 656.4912,
+          "passed": false,
+          "reason": "PF_oos=0.321<1.0; ops_val=3<5"
+        },
+        {
+          "window": "C_recente",
+          "trades_val": 4,
+          "pf_val": 1.2857,
+          "pf_oos": 1.2857,
+          "net_pnl_oos": 15.0,
+          "max_dd_oos": 0.35,
+          "pf_train": 0.5143,
+          "trades_oos": 6,
+          "score": 1.4536,
+          "passed": false,
+          "reason": "ops_val=4<5"
+        }
+      ]
+    }
+  ],
+  "table": [
+    {
+      "Hipótese": "MA_base_20_50",
+      "Base": "ma_crossover",
+      "Nota": "original default",
+      "Operações (soma val)": 66,
+      "PF validação (méd)": 0.5574,
+      "PF teste (méd)": 0.6331,
+      "Lucro líquido teste (soma)": -332.5,
+      "Drawdown máx. (máx janelas)": 2.24,
+      "Janelas": {
+        "A_inicial": {
+          "ops": 31,
+          "PF_val": 0.3086,
+          "PF_oos": 0.45,
+          "PnL": -192.5,
+          "DD": 2.24,
+          "passou": false
+        },
+        "B_media": {
+          "ops": 19,
+          "PF_val": 0.9351,
+          "PF_oos": 0.9351,
+          "PnL": -12.5,
+          "DD": 0.7,
+          "passou": false
+        },
+        "C_recente": {
+          "ops": 16,
+          "PF_val": 0.4286,
+          "PF_oos": 0.5143,
+          "PnL": -127.5,
+          "DD": 1.77,
+          "passou": false
+        }
+      },
+      "Janelas_ok": 0,
+      "Decisão": "rejeitada",
+      "Motivo": "Só 0/3 janelas; A_inicial:PF_val=0.309<1.05; PF_oos=0.450<1.0; score=-16.45<0.5 || B_media:PF_val=0.935<1.05; PF_oos=0.935<1.0; score=-0.88<0.5 || C_recente:PF_val=0.429<1.05; PF_oos=0.514<1.0; score=-12.53<0.5"
+    },
+    {
+      "Hipótese": "MA_near_5_50",
+      "Base": "ma_crossover",
+      "Nota": "near-miss histórico",
+      "Operações (soma val)": 74,
+      "PF validação (méd)": 1.0608,
+      "PF teste (méd)": 0.6911,
+      "Lucro líquido teste (soma)": -267.5,
+      "Drawdown máx. (máx janelas)": 1.94,
+      "Janelas": {
+        "A_inicial": {
+          "ops": 36,
+          "PF_val": 0.3103,
+          "PF_oos": 0.7071,
+          "PnL": -102.5,
+          "DD": 1.94,
+          "passou": false
+        },
+        "B_media": {
+          "ops": 23,
+          "PF_val": 1.4026,
+          "PF_oos": 0.7232,
+          "PnL": -77.5,
+          "DD": 1.32,
+          "passou": false
+        },
+        "C_recente": {
+          "ops": 15,
+          "PF_val": 1.4694,
+          "PF_oos": 0.6429,
+          "PnL": -87.5,
+          "DD": 1.6,
+          "passou": false
+        }
+      },
+      "Janelas_ok": 0,
+      "Decisão": "rejeitada",
+      "Motivo": "Só 0/3 janelas; A_inicial:PF_val=0.310<1.05; PF_oos=0.707<1.0; score=-14.99<0.5 || B_media:PF_oos=0.723<1.0 || C_recente:PF_oos=0.643<1.0"
+    },
+    {
+      "Hipótese": "MA_20_50_H1",
+      "Base": "ma_crossover",
+      "Nota": "default+H1",
+      "Operações (soma val)": 39,
+      "PF validação (méd)": 0.9286,
+      "PF teste (méd)": 0.7839,
+      "Lucro líquido teste (soma)": -130.0,
+      "Drawdown máx. (máx janelas)": 1.2,
+      "Janelas": {
+        "A_inicial": {
+          "ops": 20,
+          "PF_val": 0.4286,
+          "PF_oos": 1.0,
+          "PnL": -0.0,
+          "DD": 0.7,
+          "passou": false
+        },
+        "B_media": {
+          "ops": 11,
+          "PF_val": 1.0714,
+          "PF_oos": 0.8571,
+          "PnL": -15.0,
+          "DD": 0.87,
+          "passou": false
+        },
+        "C_recente": {
+          "ops": 8,
+          "PF_val": 1.2857,
+          "PF_oos": 0.4945,
+          "PnL": -115.0,
+          "DD": 1.2,
+          "passou": false
+        }
+      },
+      "Janelas_ok": 0,
+      "Decisão": "rejeitada",
+      "Motivo": "Só 0/3 janelas; A_inicial:PF_val=0.429<1.05; score=-9.94<0.5 || B_media:PF_oos=0.857<1.0; score=-0.32<0.5 || C_recente:PF_oos=0.494<1.0; score=-0.99<0.5"
+    },
+    {
+      "Hipótese": "MA_5_50_H1",
+      "Base": "ma_crossover",
+      "Nota": "near-miss+H1",
+      "Operações (soma val)": 46,
+      "PF validação (méd)": 0.7959,
+      "PF teste (méd)": 0.8311,
+      "Lucro líquido teste (soma)": -100.0,
+      "Drawdown máx. (máx janelas)": 1.52,
+      "Janelas": {
+        "A_inicial": {
+          "ops": 18,
+          "PF_val": 0.1607,
+          "PF_oos": 1.1688,
+          "PnL": 32.5,
+          "DD": 0.77,
+          "passou": false
+        },
+        "B_media": {
+          "ops": 15,
+          "PF_val": 1.125,
+          "PF_oos": 0.4675,
+          "PnL": -102.5,
+          "DD": 1.52,
+          "passou": false
+        },
+        "C_recente": {
+          "ops": 13,
+          "PF_val": 1.102,
+          "PF_oos": 0.8571,
+          "PnL": -30.0,
+          "DD": 0.72,
+          "passou": false
+        }
+      },
+      "Janelas_ok": 0,
+      "Decisão": "rejeitada",
+      "Motivo": "Só 0/3 janelas; A_inicial:PF_val=0.161<1.05; score=-12.75<0.5 || B_media:PF_oos=0.468<1.0; score=-2.96<0.5 || C_recente:PF_oos=0.857<1.0; score=0.03<0.5"
+    },
+    {
+      "Hipótese": "MA_20_50_H1_vol",
+      "Base": "ma_crossover",
+      "Nota": "default+H1+vol",
+      "Operações (soma val)": 30,
+      "PF validação (méd)": 1.7418,
+      "PF teste (méd)": 1.0663,
+      "Lucro líquido teste (soma)": 17.5,
+      "Drawdown máx. (máx janelas)": 0.52,
+      "Janelas": {
+        "A_inicial": {
+          "ops": 16,
+          "PF_val": 0.2967,
+          "PF_oos": 1.5,
+          "PnL": 52.5,
+          "DD": 0.52,
+          "passou": false
+        },
+        "B_media": {
+          "ops": 7,
+          "PF_val": 1.7143,
+          "PF_oos": 0.9643,
+          "PnL": -2.5,
+          "DD": 0.52,
+          "passou": false
+        },
+        "C_recente": {
+          "ops": 7,
+          "PF_val": 3.2143,
+          "PF_oos": 0.7347,
+          "PnL": -32.5,
+          "DD": 0.52,
+          "passou": false
+        }
+      },
+      "Janelas_ok": 0,
+      "Decisão": "rejeitada",
+      "Motivo": "Só 0/3 janelas; A_inicial:PF_val=0.297<1.05; score=-8.69<0.5 || B_media:PF_oos=0.964<1.0 || C_recente:PF_oos=0.735<1.0"
+    },
+    {
+      "Hipótese": "MA_20_50_sess_7_17",
+      "Base": "ma_crossover",
+      "Nota": "default+hora Londres/NY",
+      "Operações (soma val)": 33,
+      "PF validação (méd)": 0.9857,
+      "PF teste (méd)": 1.1143,
+      "Lucro líquido teste (soma)": -160.0,
+      "Drawdown máx. (máx janelas)": 1.52,
+      "Janelas": {
+        "A_inicial": {
+          "ops": 16,
+          "PF_val": 0.7714,
+          "PF_oos": 0.5143,
+          "PnL": -85.0,
+          "DD": 1.12,
+          "passou": false
+        },
+        "B_media": {
+          "ops": 11,
+          "PF_val": 1.5429,
+          "PF_oos": 2.5714,
+          "PnL": 55.0,
+          "DD": 0.17,
+          "passou": true
+        },
+        "C_recente": {
+          "ops": 6,
+          "PF_val": 0.6429,
+          "PF_oos": 0.2571,
+          "PnL": -130.0,
+          "DD": 1.52,
+          "passou": false
+        }
+      },
+      "Janelas_ok": 1,
+      "Decisão": "rejeitada",
+      "Motivo": "Só 1/3 janelas; A_inicial:PF_val=0.771<1.05; PF_oos=0.514<1.0; score=-7.03<0.5 || C_recente:PF_val=0.643<1.05; PF_oos=0.257<1.0; score=-9.84<0.5"
+    },
+    {
+      "Hipótese": "ST_base_20_60",
+      "Base": "session_trend",
+      "Nota": "original default",
+      "Operações (soma val)": 25,
+      "PF validação (méd)": 0.8979,
+      "PF teste (méd)": 1.1735,
+      "Lucro líquido teste (soma)": -22.5,
+      "Drawdown máx. (máx janelas)": 0.82,
+      "Janelas": {
+        "A_inicial": {
+          "ops": 10,
+          "PF_val": 0.551,
+          "PF_oos": 0.7347,
+          "PnL": -32.5,
+          "DD": 0.47,
+          "passou": false
+        },
+        "B_media": {
+          "ops": 10,
+          "PF_val": 1.2857,
+          "PF_oos": 2.1429,
+          "PnL": 60.0,
+          "DD": 0.35,
+          "passou": true
+        },
+        "C_recente": {
+          "ops": 5,
+          "PF_val": 0.8571,
+          "PF_oos": 0.6429,
+          "PnL": -50.0,
+          "DD": 0.82,
+          "passou": false
+        }
+      },
+      "Janelas_ok": 1,
+      "Decisão": "rejeitada",
+      "Motivo": "Só 1/3 janelas; A_inicial:PF_val=0.551<1.05; PF_oos=0.735<1.0; score=-9.24<0.5 || C_recente:PF_val=0.857<1.05; PF_oos=0.643<1.0; score=-4.58<0.5"
+    },
+    {
+      "Hipótese": "ST_10_40",
+      "Base": "session_trend",
+      "Nota": "variante sessão mais rápida",
+      "Operações (soma val)": 42,
+      "PF validação (méd)": 1.6339,
+      "PF teste (méd)": 1.0714,
+      "Lucro líquido teste (soma)": 30.0,
+      "Drawdown máx. (máx janelas)": 0.87,
+      "Janelas": {
+        "A_inicial": {
+          "ops": 21,
+          "PF_val": 0.4018,
+          "PF_oos": 1.4464,
+          "PnL": 62.5,
+          "DD": 0.47,
+          "passou": false
+        },
+        "B_media": {
+          "ops": 12,
+          "PF_val": 3.8571,
+          "PF_oos": 1.125,
+          "PnL": 17.5,
+          "DD": 0.72,
+          "passou": true
+        },
+        "C_recente": {
+          "ops": 9,
+          "PF_val": 0.6429,
+          "PF_oos": 0.6429,
+          "PnL": -50.0,
+          "DD": 0.87,
+          "passou": false
+        }
+      },
+      "Janelas_ok": 1,
+      "Decisão": "rejeitada",
+      "Motivo": "Só 1/3 janelas; A_inicial:PF_val=0.402<1.05; score=-5.90<0.5 || C_recente:PF_val=0.643<1.05; PF_oos=0.643<1.0; score=-7.47<0.5"
+    },
+    {
+      "Hipótese": "ST_20_60_H1",
+      "Base": "session_trend",
+      "Nota": "default+H1",
+      "Operações (soma val)": 12,
+      "PF validação (méd)": 15.3928,
+      "PF teste (méd)": 0.8857,
+      "Lucro líquido teste (soma)": -25.0,
+      "Drawdown máx. (máx janelas)": 0.65,
+      "Janelas": {
+        "A_inicial": {
+          "ops": 5,
+          "PF_val": 0.3214,
+          "PF_oos": 0.7714,
+          "PnL": -20.0,
+          "DD": 0.52,
+          "passou": false
+        },
+        "B_media": {
+          "ops": 5,
+          "PF_val": 0.8571,
+          "PF_oos": 0.8571,
+          "PnL": -7.5,
+          "DD": 0.35,
+          "passou": false
+        },
+        "C_recente": {
+          "ops": 2,
+          "PF_val": 45.0,
+          "PF_oos": 1.0286,
+          "PnL": 2.5,
+          "DD": 0.65,
+          "passou": false
+        }
+      },
+      "Janelas_ok": 0,
+      "Decisão": "rejeitada",
+      "Motivo": "Só 0/3 janelas; A_inicial:PF_val=0.321<1.05; PF_oos=0.771<1.0; score=-13.65<0.5 || B_media:PF_val=0.857<1.05; PF_oos=0.857<1.0; score=-3.38<0.5 || C_recente:Rejeitada: poucas operações na validação (risco de sobreajustamento).; ops_val=2<5"
+    },
+    {
+      "Hipótese": "ST_10_40_H1_vol",
+      "Base": "session_trend",
+      "Nota": "rápida+H1+vol",
+      "Operações (soma val)": 15,
+      "PF validação (méd)": 23.1857,
+      "PF teste (méd)": 1.1786,
+      "Lucro líquido teste (soma)": 32.5,
+      "Drawdown máx. (máx janelas)": 0.7,
+      "Janelas": {
+        "A_inicial": {
+          "ops": 8,
+          "PF_val": 0.7714,
+          "PF_oos": 1.9286,
+          "PnL": 65.0,
+          "DD": 0.35,
+          "passou": false
+        },
+        "B_media": {
+          "ops": 3,
+          "PF_val": 67.5,
+          "PF_oos": 0.3214,
+          "PnL": -47.5,
+          "DD": 0.7,
+          "passou": false
+        },
+        "C_recente": {
+          "ops": 4,
+          "PF_val": 1.2857,
+          "PF_oos": 1.2857,
+          "PnL": 15.0,
+          "DD": 0.35,
+          "passou": false
+        }
+      },
+      "Janelas_ok": 0,
+      "Decisão": "rejeitada",
+      "Motivo": "Só 0/3 janelas; A_inicial:PF_val=0.771<1.05 || B_media:PF_oos=0.321<1.0; ops_val=3<5 || C_recente:ops_val=4<5"
+    }
+  ],
+  "robot_approved_count": 0,
+  "conclusion": "Nenhuma hipótese atingiu critérios em ≥2 janelas walk-forward. Robô permanece em AGUARDAR. Sem mais otimização sobre os mesmos dados."
+}

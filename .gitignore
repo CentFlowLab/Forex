@@ -1,0 +1,77 @@
+# Secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# Node
+node_modules/
+frontend/dist/
+frontend/.vite/
+*.log
+npm-debug.log*
+
+# Databases and runtime
+backend/data/*.db
+backend/data/*.db-journal
+backend/data/uploads/
+*.sqlite
+*.sqlite3
+
+# IDE / OS
+.idea/
+.vscode/
+.cursor/
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Generated
+backend/data/runtime/
+*.bak
+
+# Upstream reference clone (não é dependência de runtime)
+vendor/
+
+# Segredos adicionais
+.env.*
+!.env.example
+secrets.json
+*credentials*.json
+*token*.json
+
+# Bases de dados e relatórios locais
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Histórico local de mercado
+backend/data/historical/
+*.parquet
+# Dados hist�ricos locais
+backend/data/historical/
+*.parquet
+
+# Ficheiros tempor�rios
+backend/tmp/
+
+backend/data/ai_responses/

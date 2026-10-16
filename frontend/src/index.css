@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  background: #070b12;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.panel {
+  @apply rounded-xl border border-white/10 bg-ink-900 shadow-lg shadow-black/20;
+}
+
+.panel-title {
+  @apply text-[11px] uppercase tracking-[0.12em] text-slate-400;
+}
+
+.mono {
+  font-variant-numeric: tabular-nums;
+}
