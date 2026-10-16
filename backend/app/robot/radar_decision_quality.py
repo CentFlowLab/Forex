@@ -260,11 +260,11 @@ def detect_ev_double_count(
     # Contradição aritmética explícita: EV positivo não pode ser "inferior a zero".
     # Não confundir "abaixo do limiar de entrada" com "negativo".
     contradiction_re = re.compile(
-        r"(?:EV\\s*l[ií]quido|expected_net)[^\\d\\-]{0,24}"
-        r"(?P<value>-?\\d+(?:[.,]\\d+)?)"
-        r"[^!?\\n]{0,110}?"
-        r"(?:inferior\\s+a\\s+(?:zero|0(?:[.,]0+)?)|"
-        r"menor\\s+(?:do\\s+)?que\\s+(?:zero|0(?:[.,]0+)?)|"
+        r"(?:EV\s*l[ií]quido|expected_net)[^\d\-]{0,24}"
+        r"(?P<value>-?\d+(?:[.,]\d+)?)"
+        r"[^!?\n]{0,110}?"
+        r"(?:inferior\s+a\s+(?:zero|0(?:[.,]0+)?)|"
+        r"menor\s+(?:do\s+)?que\s+(?:zero|0(?:[.,]0+)?)|"
         r"negativ[oa])",
         flags=re.IGNORECASE,
     )
